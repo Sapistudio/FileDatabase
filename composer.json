@@ -1,0 +1,12 @@
+{
+    "name": "sapistudio/filedatabase",
+    "type": "library",
+    "description": "Fork after https://github.com/Greg0/Lazer-Database",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.6"
+    },
+    "autoload": {
+         "psr-4": { "SapiStudio\\FileDatabase\\": "src/" }
+    }
+}
