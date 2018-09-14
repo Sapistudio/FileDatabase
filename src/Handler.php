@@ -19,11 +19,11 @@ class Handler implements \IteratorAggregate, \Countable{
      * @param mixed $databaseName
      * @return
      */
-    public static function load($databaseName,$autoCreate = true)
+    public static function load($databaseName,array $options = [])
     {
         if (!self::dbExists($databaseName))
             throw new \Exception('Database: '.$databaseName.' doesn\'t exists.');
-        return new static($databaseName);
+        return new static($databaseName,$options);
     }
     
     /**
