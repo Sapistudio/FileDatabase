@@ -164,12 +164,3 @@ Lazer::table('table_name')->where('nickname', '=', 'edited_user')->delete();
 Lazer::table('table_name')->delete();
 ```
 
-Description
------------
-For some examples please check 
-[Examples](docs/examples.md) and [Tutorial](docs/tutorial.md) file.
-More informations you can find in PHPDoc, I think it's documented very well.
-
-E-mail: <gerg0sz92@gmail.com>
-
-If you like and using/want to use my repo or you have any suggestions I will be greatful for sending me few words on e-mail.
