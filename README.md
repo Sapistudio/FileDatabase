@@ -163,55 +163,6 @@ Lazer::table('table_name')->where('nickname', '=', 'edited_user')->delete();
 ```php
 Lazer::table('table_name')->delete();
 ```
-### Relations
-
-To work with relations use class Relation
-```php
-use Lazer\Classes\Relation; // example
-```
-
-#### Relation types
-
-- `belongsTo` - relation many to one
-- `hasMany` - relation one to many
-- `hasAndBelongsToMany` - relation many to many
-
-#### Methods
-
-##### Chain methods
-
-- `belongsTo()` - set relation belongsTo
-- `hasMany()` - set relation hasMany
-- `hasAndBelongsToMany()` - set relation hasAndBelongsToMany
-- `localKey()` - set relation local key
-- `foreignKey()` - set relation foreign key
-- `with()` - allow to work on existing relation
-
-##### Ending methods
-
-- `setRelation()` - creating specified relation
-- `removeRelation()` - remove relation
-- `getRelation()` - return informations about relation
-- `getJunction()` - return name of junction table in `hasAndBelongsToMany` relation
-
-#### Create relation
-```php
-Relation::table('table1')->belongsTo('table2')->localKey('table2_id')->foreignKey('id')->setRelation();
-Relation::table('table2')->hasMany('table1')->localKey('id')->foreignKey('table2_id')->setRelation();
-Relation::table('table2')->hasAndBelongsToMany('table1')->localKey('id')->foreignKey('id')->setRelation(); // Junction table will be crete automaticly
-```
-
-#### Remove relation
-```php
-Relation::table('table1')->with('table2')->removeRelation();
-```
-#### Get relation information
-You can do it by two ways. Use Standard Database class or Relation but results will be different.
-```php
-Relation::table('table1')->with('table2')->getRelation(); // relation with specified table
-Lazer::table('table1')->relations(); // all relations
-Lazer::table('table1')->relations('table2'); // relation with specified table
-```
 
 Description
 -----------
