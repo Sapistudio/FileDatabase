@@ -1,8 +1,3 @@
-Requirements
-------------
-- PHP 5.6+
-- Composer
-
 Installation
 ------------
 ```
@@ -37,10 +32,6 @@ SapiStudio\FileDatabase\Handler::remove('table_name');
 ### Load database
 ```php
 SapiStudio\FileDatabase\Handler::load('table_name');
-```
-if passed a second argument to true,it will autocreate the table if it doesnt exists
-```php
-SapiStudio\FileDatabase\Handler::load('table_name',true);
 ```
 
 ### Check if a database exists
