@@ -26,8 +26,6 @@ composer require greg0/lazer-database
 
 ### Create database
 ```php
-
-
 SapiStudio\FileDatabase\Handler::createDatabase('table_name',[{field_name} => {field_type}]);
 ```
 	
