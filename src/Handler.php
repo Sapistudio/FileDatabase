@@ -14,12 +14,12 @@ class Handler implements \IteratorAggregate, \Countable{
     protected $currentKey;
 
     /**
-     * Database::loadTable()
+     * Database::load()
      * 
      * @param mixed $databaseName
      * @return
      */
-    public static function loadTable($databaseName,$autoCreate = false)
+    public static function load($databaseName,$autoCreate = true)
     {
         if (!self::dbExists($databaseName)){
             if(!$autoCreate)
@@ -474,6 +474,7 @@ class Handler implements \IteratorAggregate, \Countable{
     {
         return count($this->documentEntries);
     }
+    
     
     /**
      * Database::limit()
