@@ -21,15 +21,8 @@ class Handler implements \IteratorAggregate, \Countable{
      */
     public static function load($databaseName,$autoCreate = true)
     {
-        if (!self::dbExists($databaseName)){
-            if(!$autoCreate)
-                throw new \Exception('Database: '.$databaseName.' doesn\'t exists.');
-            try{
-                self::createDatabase($databaseName);
-            }catch(\Exception $e){
-                return false;
-            }
-        }
+        if (!self::dbExists($databaseName))
+            throw new \Exception('Database: '.$databaseName.' doesn\'t exists.');
         return new static($databaseName);
     }
     
