@@ -13,12 +13,6 @@ class Handler implements \IteratorAggregate, \Countable{
     protected $currentId;
     protected $currentKey;
 
-    /**
-     * Database::load()
-     * 
-     * @param mixed $databaseName
-     * @return
-     */
     public static function load($databaseName,array $options = [])
     {
         if (!self::dbExists($databaseName))
@@ -26,13 +20,6 @@ class Handler implements \IteratorAggregate, \Countable{
         return new static($databaseName,$options);
     }
     
-    /**
-     * Database::createDatabase()
-     * 
-     * @param mixed $databaseName
-     * @param mixed $fields
-     * @return
-     */
     public static function createDatabase($databaseName, array $fields = [])
     {
         $fields = Validate::arrToLower($fields);
@@ -49,22 +36,10 @@ class Handler implements \IteratorAggregate, \Countable{
         Document::loadConfig($databaseName)->put($data);
     }
     
-    /**
-     * Database::dbExists()
-     * 
-     * @param mixed $databaseName
-     * @return
-     */
     public static function dbExists($databaseName){
         return (Document::load($databaseName)->exists() && Document::loadConfig($databaseName)->exists()) ? true : false;
     }
     
-    /**
-     * Database::__construct()
-     * 
-     * @param mixed $databaseName
-     * @return
-     */
     public function __construct($databaseName = null){
         $this->databasename     = $databaseName;
         $this->databaseData     = Document::load($this->getName());
@@ -72,66 +47,32 @@ class Handler implements \IteratorAggregate, \Countable{
         return $this->setFields();
     }
     
-    /**
-     * Database::__set()
-     * 
-     * @param mixed $name
-     * @param mixed $value
-     * @return
-     */
     public function __set($name, $value)
     {
         if ($this->checkField($name) && $this->checkType($name,$value))
             $this->tableFields->{$name} = utf8_encode($value);
     }
 
-    /**
-     * Database::__get()
-     * 
-     * @param mixed $name
-     * @return
-     */
     public function __get($name)
     {
         return (isset($this->tableFields->{$name})) ? $this->tableFields->{$name} : false;
     }
 
-    /**
-     * Database::__isset()
-     * 
-     * @param mixed $name
-     * @return
-     */
     public function __isset($name)
     {
         return isset($this->tableFields->{$name});
     }
     
-    /**
-     * Database::getData()
-     * 
-     * @return
-     */
     protected function getData()
     {
         return $this->databaseData->get();
     }
 
-    /**
-     * Database::setData()
-     * 
-     * @return
-     */
     protected function setData()
     {
         $this->documentEntries = $this->getData();
     }
     
-    /**
-     * Database::filterEntries()
-     * 
-     * @return
-     */
     protected function filterEntries()
     {
         $this->setData();
@@ -143,31 +84,14 @@ class Handler implements \IteratorAggregate, \Countable{
         $this->clearQuery();
     }
 
-    /**
-     * Database::getIdentifier()
-     * 
-     * @return
-     */
     public static function getIdentifier(){
         return self::$uniqueIdentifier;
     }
     
-    /**
-     * Database::setIdentifier()
-     * 
-     * @param mixed $uid
-     * @return
-     */
     public static function setIdentifier($uid){
         self::$uniqueIdentifier = $uid;
     }
     
-    /**
-     * Database::getRowKey()
-     * 
-     * @param mixed $id
-     * @return
-     */
     protected function getRowKey($id)
     {
         foreach ($this->getData() as $key => $data)
@@ -181,11 +105,6 @@ class Handler implements \IteratorAggregate, \Countable{
         throw new \Exception('No data found with ID: ' . $id);
     }
 
-    /**
-     * Database::setFields()
-     * 
-     * @return
-     */
     protected function setFields()
     {
         $this->tableFields = new \stdClass();
@@ -194,12 +113,6 @@ class Handler implements \IteratorAggregate, \Countable{
         return $this;            
     }
 
-    /**
-     * Database::set()
-     * 
-     * @param mixed $data
-     * @return
-     */
     public function set($data)
     {
         foreach ($data as $name => $value){
@@ -208,12 +121,25 @@ class Handler implements \IteratorAggregate, \Countable{
         }
     }
     
-    /**
-     * Database::checkField()
-     * 
-     * @param mixed $name
-     * @return
-     */
+    public function addEntry($data = [])
+    {
+        if(!$data)
+            return false;
+        if(!isset($data[self::getIdentifier()]))
+            $this->clearQuery();
+        foreach ($data as $name => $value){
+            if ($this->checkField($name) && $this->checkType($name,$value))
+                $this->tableFields->{$name} = utf8_encode($value);
+        }
+        $this->store();
+    }
+    
+    public function getEntry($entryId = null)
+    {
+        $this->select($entryId);
+        return $this->documentEntries;
+    }
+    
     public function checkField($name)
     {
         if (!in_array($name, $this->fields()))
@@ -221,13 +147,6 @@ class Handler implements \IteratorAggregate, \Countable{
         return true;
     }
 
-    /**
-     * Database::checkType()
-     * 
-     * @param mixed $name
-     * @param mixed $value
-     * @return
-     */
     public function checkType($name, $value)
     {
         $schema = $this->schema();
@@ -236,23 +155,11 @@ class Handler implements \IteratorAggregate, \Countable{
         throw new \Exception('Wrong data type');
     }
 
-    /**
-     * Database::removeDatabase()
-     * 
-     * @param mixed $databaseName
-     * @return
-     */
     public static function removeDatabase($databaseName)
     {
         return (Document::load($databaseName)->remove() && Document::loadConfig($databaseName)->remove()) ? true : false;
     }
 
-    /**
-     * Database::addFields()
-     * 
-     * @param mixed $fields
-     * @return
-     */
     public function addFields(array $fields)
     {
         $fields = Validate::arrToLower($fields);
@@ -273,12 +180,6 @@ class Handler implements \IteratorAggregate, \Countable{
         }
     }
 
-    /**
-     * Database::deleteFields()
-     * 
-     * @param mixed $fields
-     * @return
-     */
     public function deleteFields(array $fields)
     {
         $fields = Validate::arrToLower($fields);
@@ -299,61 +200,31 @@ class Handler implements \IteratorAggregate, \Countable{
         $this->databaseConfig->put($config);
     }
 
-    /**
-     * Database::getName()
-     * 
-     * @return
-     */
     public function getName()
     {
         return $this->databasename;
     }
 
-    /**
-     * Database::config()
-     * 
-     * @return
-     */
     public function config()
     {
         return $this->databaseConfig->get();
     }
 
-    /**
-     * Database::fields()
-     * 
-     * @return
-     */
     public function fields()
     {
         return array_keys($this->databaseConfig->getKey('schema', true));
     }
 
-    /**
-     * Database::schema()
-     * 
-     * @return
-     */
     public function schema()
     {
         return $this->databaseConfig->getKey('schema', true);
     }
 
-    /**
-     * Database::lastId()
-     * 
-     * @return
-     */
     public function lastId()
     {
         return $this->databaseConfig->getKey('last_id');
     }
 
-    /**
-     * Database::store()
-     * 
-     * @return
-     */
     public function store()
     {
         $data = $this->getData();
@@ -373,11 +244,6 @@ class Handler implements \IteratorAggregate, \Countable{
         $this->databaseData->put($data);
     }
 
-    /**
-     * Database::delete()
-     * 
-     * @return
-     */
     public function delete()
     {
         $data = $this->getData();
@@ -389,12 +255,6 @@ class Handler implements \IteratorAggregate, \Countable{
         return $this->databaseData->put($this->documentEntries) ? true : false;
     }
 
-    /**
-     * Database::select()
-     * 
-     * @param mixed $id
-     * @return
-     */
     public function select($id = null)
     {
         if ($id !== null)
@@ -410,42 +270,22 @@ class Handler implements \IteratorAggregate, \Countable{
         return $this;
     }
     
-    /**
-     * Handler::first()
-     * 
-     * @return
-     */
     public function first(){
         $data = $this->getData();
         return (!isset($data[0])) ? false : $data[0];
     }
     
-    /**
-     * Handler::last()
-     * 
-     * @return
-     */
     public function last(){
         $data = $this->getData();
         return (!$data) ? false : end($data);
     }
     
-    /**
-     * Database::clearQuery()
-     * 
-     * @return
-     */
     protected function clearQuery()
     {
         $this->documentfilters  = [];
         $this->currentId        = $this->currentKey = NULL;
     }
     
-    /**
-     * Database::getIterator()
-     * 
-     * @return
-     */
     public function getIterator()
     {
         return new \ArrayIterator($this->documentEntries);
@@ -458,24 +298,11 @@ class Handler implements \IteratorAggregate, \Countable{
     
     
 
-    /**
-     * Database::count()
-     * 
-     * @return
-     */
     public function count()
     {
         return count($this->documentEntries);
     }
     
-    
-    /**
-     * Database::limit()
-     * 
-     * @param mixed $number
-     * @param integer $offset
-     * @return
-     */
     public function limit($number, $offset = 0)
     {
         $this->documentEntries = array_slice($this->documentEntries, $offset, $number);
