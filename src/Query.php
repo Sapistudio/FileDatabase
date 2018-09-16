@@ -108,7 +108,7 @@ class Query extends Query\Logic {
      * 
      * @return
      */
-    public function results()
+    public function find()
     {
         return parent::runQuery();
     }
@@ -120,6 +120,6 @@ class Query extends Query\Logic {
      */
     public function get()
     {
-        return $this->results()->toArray();
+        return $this->find()->toArray();
     }
 }
