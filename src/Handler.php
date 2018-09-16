@@ -30,7 +30,7 @@ class Handler implements \Countable{
         $this->databasename     = $databaseName;
         $this->databaseConfig   = (new Config($configOptions))->setName($databaseName);
         $this->databaseDocument = (new Document)->setName($databaseName)->setDir($this->databaseConfig->getDir());
-        if (!self::dbExists($databaseName)){
+        if (!$this->dbExists()){
             $fields = Validate::arrToLower($this->databaseConfig->getOption('fields'));
             Validate::types(array_values($fields));
             if(!array_key_exists($this->databaseConfig->getIdentifier(),$fields))
@@ -48,7 +48,7 @@ class Handler implements \Countable{
      * 
      * @return
      */
-    public function dbExists($databaseName){
+    public function dbExists(){
         return ($this->databaseDocument->exists() && $this->databaseConfig->exists()) ? true : false;
     }
     
@@ -57,7 +57,7 @@ class Handler implements \Countable{
      * 
      * @return
      */
-    public function removeDatabase($databaseName)
+    public function removeDatabase()
     {
         return ($this->databaseDocument->remove() && $this->databaseConfig->remove()) ? true : false;
     }
