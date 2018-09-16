@@ -70,7 +70,7 @@ $dbObject->get(1)->delete(); //Will remove row with ID 1
 ```
 #### Multiple records deleting
 ```php
-$dbObject->where('name', '=', 'John')->find()->delete(); //Will remove John from DB
+$dbObject->query()->where('name', '=', 'John')->find()->delete(); //Will remove John from DB
 ```
 #### Clear table
 ```php
