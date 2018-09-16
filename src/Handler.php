@@ -281,8 +281,7 @@ class Handler implements \Countable{
             if ($this->checkField($name))
                 $this->tableFields->{$name} = utf8_encode($value);
         }
-        $this->save();
-        return $this;
+        return $this->save();
     }
     
     /**
@@ -293,9 +292,21 @@ class Handler implements \Countable{
     public function save()
     {
         $data = $this->getData();
-        (!$this->currentId) ? array_push($data,$this->tableFields) : ($data[$this->currentKey] = $this->tableFields);
+        if (!$this->currentId)
+        {
+            $config = $this->getConfig();
+            $config->last_id++;
+            $this->tableFields->{$this->databaseConfig->getIdentifier()} = $config->last_id;
+            array_push($data,$this->tableFields);
+            $this->databaseConfig->put($config);
+        }
+        else
+        {
+            $this->tableFields->{$this->databaseConfig->getIdentifier()} = $this->currentId;
+            $data[$this->currentKey]    = $this->tableFields;
+        }
         $this->databaseDocument->put($data);
-        return $this->setFields();
+        return (!$this->currentId) ? $this->setFields() : $this;
     }
 
     /**
