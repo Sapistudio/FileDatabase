@@ -326,6 +326,21 @@ class Handler implements \Countable{
         $this->documentEntries = array_values($data);
         return $this->databaseDocument->put($this->documentEntries) ? true : false;
     }
+    
+    /**
+     * Handler::truncate()
+     * 
+     * @return
+     */
+    public function truncate()
+    {
+        $config = $this->getConfig();
+        $config->last_id = 0;
+        $this->databaseConfig->put($config);
+        $this->documentEntries = [];
+        $this->databaseDocument->put([]);
+        return $this->setFields();
+    }
 
     /**
      * Handler::clearIdentifier()
