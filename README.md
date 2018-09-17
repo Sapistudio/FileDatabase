@@ -74,9 +74,5 @@ $dbObject->query()->where('name', '=', 'John')->find()->delete(); //Will remove 
 ```
 #### Clear table
 ```php
-$dbObject->findAll()->delete();
-
-// OR
-
-$dbObject->delete();
+$dbObject->truncate();
 ```
