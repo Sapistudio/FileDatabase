@@ -15,7 +15,7 @@ class Config extends Document{
     {
         if($config){
             foreach ($config as $key => $value)
-                 $this->configOptions->{$key} = $value;
+                 @$this->configOptions->{$key} = $value;
         }
         if($this->getOption('dir'))
             $this->setDir($this->getOption('dir'));
