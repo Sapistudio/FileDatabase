@@ -100,7 +100,7 @@ class Handler implements \Countable{
     public function __set($name, $value)
     {
         if ($this->checkField($name))
-            $this->tableFields->{$name} = utf8_encode($value);
+            $this->tableFields->{$name} = \utf8_encode($value);
     }
 
     /**
