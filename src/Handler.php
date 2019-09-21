@@ -29,7 +29,7 @@ class Handler implements \Countable{
     public function __construct($databaseName = null,array $configOptions = []){
         $this->databasename     = $databaseName;
         $configOptions          = (!$configOptions) ? ['fields' => []] : $configOptions;
-        $this->databaseConfig   = (new Config($configOptions))->setName($databaseName)->setDir();
+        $this->databaseConfig   = (new Config($configOptions))->setName($databaseName)->setDir($configOptions['dir']);
         $this->databaseDocument = (new Document)->setName($databaseName)->setDir($this->databaseConfig->getDir());
         if (!$this->dbExists()){
             $fields = Validate::arrToLower($this->databaseConfig->getOption('fields'));
