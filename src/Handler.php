@@ -272,7 +272,6 @@ class Handler implements \Countable{
             shuffle($entries);
             foreach(array_rand($entries,$total) as $index=>$entryKey)
                 $return[] = $entries[$entryKey];
-            print_R($return);
         }else
             $return = $entries;
         return $return;
