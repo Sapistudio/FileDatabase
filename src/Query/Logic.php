@@ -8,22 +8,14 @@ class Logic{
     protected $databaseHandler;
     protected $filters;
 
-    /**
-     * Logic::__construct()
-     * 
-     * @return
-     */
+    /** Logic::__construct()*/
     public function __construct(Database $database)
     {
         $this->databaseHandler  = $database;
         $this->filters          = new Filter();
     }
 
-    /**
-     * Logic::runQuery()
-     * 
-     * @return
-     */
+    /**  Logic::runQuery() */
     public function runQuery()
     {
         $filters = $this->filters->get();
@@ -49,11 +41,7 @@ class Logic{
         return $this->databaseHandler;
     }
 
-    /**
-     * Logic::filter()
-     * 
-     * @return
-     */
+    /** Logic::filter()*/
     protected function filter($filters)
     {
         $results    = [];
@@ -84,22 +72,14 @@ class Logic{
         $this->documents = $results;
     }
 
-    /**
-     * Logic::offsetLimit()
-     * 
-     * @return
-     */
+    /** Logic::offsetLimit()*/
     protected function offsetLimit()
     {
         if ($this->limit != 0 || $this->offset != 0)
             $this->documents = array_slice($this->documents, $this->offset, $this->limit);
     }
 
-    /**
-     * Logic::sort()
-     * 
-     * @return
-     */
+    /** Logic::sort()*/
     protected function sort()
     {
         $orderBy = $this->orderBy;
@@ -120,11 +100,7 @@ class Logic{
         });
     }
 
-    /**
-     * Logic::match()
-     * 
-     * @return
-     */
+    /** Logic::match() */
     public function match($document, $field, $operator, $value)
     {
         $d_value = $document->{$field};
