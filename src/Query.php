@@ -10,11 +10,7 @@ class Query extends Query\Logic {
     protected $orderBy = '';
     protected $documents = [];
 
-    /**
-     * Query::select()
-     * 
-     * @return
-     */
+    /** Query::select()*/
     public function select($fields)
     {
         if (is_string($fields))
@@ -24,44 +20,28 @@ class Query extends Query\Logic {
         return $this;
     }
 
-    /**
-     * Query::where()
-     * 
-     * @return
-     */
+    /** Query::where()*/
     public function where(...$arg)
     {
         $this->addAndFilter($arg);
         return $this;
     }
 
-    /**
-     * Query::andWhere()
-     * 
-     * @return
-     */
+    /** Query::andWhere()*/
     public function andWhere(...$arg)
     {
         $this->addAndFilter($arg);
         return $this;
     }
 
-    /**
-     * Query::orWhere()
-     * 
-     * @return
-     */
+    /** Query::orWhere()*/
     public function orWhere(...$arg)
     {
         $this->addOrFilter($arg);
         return $this;
     }
 
-    /**
-     * Query::limit()
-     * 
-     * @return
-     */
+    /** Query::limit()*/
     public function limit($limit, $offset = 0)
     {
         $this->limit   = (int) $limit;
@@ -71,11 +51,7 @@ class Query extends Query\Logic {
         return $this;
     }
     
-    /**
-     * Query::orderBy()
-     * 
-     * @return
-     */
+    /** Query::orderBy()*/
     public function orderBy($field, $sort)
     {
         $this->orderBy = $field;
@@ -83,41 +59,25 @@ class Query extends Query\Logic {
         return $this;
     }
 
-    /**
-     * Query::addAndFilter()
-     * 
-     * @return
-     */
+    /** Query::addAndFilter()*/
     protected function addAndFilter($arg)
     {
         $this->filters->add('and', $arg);
     }
     
-    /**
-     * Query::addOrFilter()
-     * 
-     * @return
-     */
+    /** Query::addOrFilter()*/
     protected function addOrFilter($arg)
     {
         $this->filters->add('or', $arg);
     }
 
-    /**
-     * Query::results()
-     * 
-     * @return
-     */
+    /** Query::results()*/
     public function find()
     {
         return parent::runQuery();
     }
     
-    /**
-     * Query::get()
-     * 
-     * @return
-     */
+    /** Query::get()*/
     public function get()
     {
         return $this->find()->toArray();
