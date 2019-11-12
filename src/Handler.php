@@ -11,175 +11,108 @@ class Handler implements \Countable{
     protected $currentId;
     protected $currentKey;
     
-    /**
-     * Handler::load()
-     * 
-     * @return
-     */
+    /** Handler::load()*/
     public static function load($databaseName,array $options = [])
     {
         return new static($databaseName,$options);
     }
     
-    /**
-     * Handler::__construct()
-     * 
-     * @return
-     */
+    /** Handler::__construct()*/
     public function __construct($databaseName = null,array $configOptions = []){
         $this->databasename     = $databaseName;
-        $configOptions          = (!$configOptions) ? ['fields' => []] : $configOptions;
-        $this->databaseConfig   = (new Config($configOptions))->setName($databaseName)->setDir($configOptions['dir']);
+        $this->databaseConfig   = (new Config($configOptions))->setName($databaseName);
         $this->databaseDocument = (new Document)->setName($databaseName)->setDir($this->databaseConfig->getDir());
         if (!$this->dbExists()){
             $fields = Validate::arrToLower($this->databaseConfig->getOption('fields'));
             Validate::types(array_values($fields));
             if(!array_key_exists($this->databaseConfig->getIdentifier(),$fields))
                 $fields = [$this->databaseConfig->getIdentifier() => 'integer'] + $fields;
-                $configData             = new \stdClass();
-                $configData->schema     = $fields;
-                $configData->last_id    = 0;
+                $configData            = new \stdClass();
+                $configData->schema    = $fields;
                 $this->databaseDocument->put([]);
                 $this->databaseConfig->put($configData);
         }
         return $this->setFields();
     }
     
-    /**
-     * Handler::dbExists()
-     * 
-     * @return
-     */
+    /** Handler::dbExists()*/
     public function dbExists(){
         return ($this->databaseDocument->exists() && $this->databaseConfig->exists()) ? true : false;
     }
     
-    /**
-     * Handler::removeDatabase()
-     * 
-     * @return
-     */
+    /** *Handler::removeDatabase()*/
     public function removeDatabase()
     {
         return ($this->databaseDocument->remove() && $this->databaseConfig->remove()) ? true : false;
     }
     
-    /**
-     * Handler::getName()
-     * 
-     * @return
-     */
+    /** Handler::getName()*/
     public function getName()
     {
         return $this->databasename;
     }
 
-    /**
-     * Handler::fields()
-     * 
-     * @return
-     */
+    /** Handler::fields()*/
     public function fields()
     {
         return array_keys($this->databaseConfig->getKey('schema', true));
     }
 
-    /**
-     * Handler::schema()
-     * 
-     * @return
-     */
+    /** Handler::schema()*/
     public function schema()
     {
         return $this->databaseConfig->getKey('schema', true);
     }
     
-    /**
-     * Handler::__set()
-     * 
-     * @return
-     */
+    /** Handler::__set()*/
     public function __set($name, $value)
     {
         if ($this->checkField($name))
             $this->tableFields->{$name} = \utf8_encode($value);
     }
 
-    /**
-     * Handler::__get()
-     * 
-     * @return
-     */
+    /** Handler::__get()*/
     public function __get($name)
     {
         return (isset($this->tableFields->{$name})) ? $this->tableFields->{$name} : false;
     }
 
-    /**
-     * Handler::__isset()
-     * 
-     * @return
-     */
+    /**  Handler::__isset()*/
     public function __isset($name)
     {
         return isset($this->tableFields->{$name});
     }
     
-    /**
-     * Handler::getData()
-     * 
-     * @return
-     */
+    /** Handler::getData() */
     protected function getData()
     {
         return $this->databaseDocument->get();
     }
     
-    /**
-     * Handler::getConfig()
-     * 
-     * @return
-     */
+    /** Handler::getConfig()*/
     public function getConfig()
     {
         return $this->databaseConfig->get();
     }
     
-    /**
-     * Handler::setDocuments()
-     * 
-     * @param mixed $documentsData
-     * @return
-     */
+    /** Handler::setDocuments()*/
     public function setDocuments($documentsData = []){
         $this->documentEntries  = $documentsData;
         return $this;
     }
     
-    /**
-     * Handler::getDocuments()
-     * 
-     * @return
-     */
+    /** Handler::getDocuments()*/
     public function getDocuments(){
         return $this->documentEntries;
     }
 
-    /**
-     * Handler::query()
-     * 
-     * @return
-     */
+    /** Handler::query()*/
     public function query()
     {
         return new Query($this);
     }
     
-    /**
-     * Handler::getRowKey()
-     * 
-     * @return
-     */
+    /** Handler::getRowKey()*/
     protected function getRowKey($id)
     {
         foreach ($this->getData() as $key => $data)
@@ -193,11 +126,7 @@ class Handler implements \Countable{
         throw new \Exception('No data found with ID: ' . $id);
     }
 
-    /**
-     * Handler::setFields()
-     * 
-     * @return
-     */
+    /** Handler::setFields()*/
     protected function setFields()
     {
         $this->tableFields = new \stdClass();
@@ -207,21 +136,13 @@ class Handler implements \Countable{
         return $this;            
     }
     
-    /**
-     * Handler::checkField()
-     * 
-     * @return
-     */
+    /** Handler::checkField() */
     public function checkField($name)
     {
         return (!in_array($name, $this->fields())) ?  $this->addFields([$name=>'string']) : true;
     }
 
-    /**
-     * Handler::addFields()
-     * 
-     * @return
-     */
+    /** Handler::addFields()*/
     public function addFields(array $fields)
     {
         $fields = Validate::arrToLower($fields);
@@ -243,11 +164,7 @@ class Handler implements \Countable{
         return true;
     }
 
-    /**
-     * Handler::deleteFields()
-     * 
-     * @return
-     */
+    /** Handler::deleteFields()*/
     public function deleteFields(array $fields)
     {
         $fields = Validate::arrToLower($fields);
@@ -269,11 +186,7 @@ class Handler implements \Countable{
         return true;
     }
 
-    /**
-     * Handler::addEntry()
-     * 
-     * @return
-     */
+    /** Handler::addEntry() */
     public function addEntry($data = [])
     {
         if(!$data)
@@ -286,11 +199,7 @@ class Handler implements \Countable{
         return $this->save();
     }
     
-    /**
-     * Handler::store()
-     * 
-     * @return
-     */
+    /**  Handler::save()*/
     public function save()
     {
         $data = $this->getData();
@@ -311,11 +220,7 @@ class Handler implements \Countable{
         return (!$this->currentId) ? $this->setFields() : $this;
     }
 
-    /**
-     * Handler::delete()
-     * 
-     * @return
-     */
+    /** Handler::delete() */
     public function delete()
     {
         $data = $this->getData();
@@ -329,11 +234,7 @@ class Handler implements \Countable{
         return $this->databaseDocument->put($this->documentEntries) ? true : false;
     }
     
-    /**
-     * Handler::truncate()
-     * 
-     * @return
-     */
+    /** Handler::truncate()*/
     public function truncate()
     {
         $config = $this->getConfig();
@@ -344,20 +245,12 @@ class Handler implements \Countable{
         return $this->setFields();
     }
 
-    /**
-     * Handler::clearIdentifier()
-     * 
-     * @return void
-     */
+    /** Handler::clearIdentifier() */
     protected function clearIdentifier(){
         $this->currentId = $this->currentKey = null;
     }
     
-    /**
-     * Handler::select()
-     * 
-     * @return
-     */
+    /** Handler::get()*/
     public function get($id = null)
     {
         if ($id == null)
@@ -370,48 +263,43 @@ class Handler implements \Countable{
         return $this;
     }
     
-    /**
-     * Handler::select()
-     * 
-     * @return
-     */
+    /** Handler::randomPick()*/
+    public function randomPick($total = 0){
+        if(!$this->getDocuments())
+            $this->findAll();
+        $entries = $this->getDocuments();
+        if($this->count() > $total){
+            shuffle($entries);
+            foreach(array_rand($entries,$total) as $index=>$entryKey)
+                $return[] = $entries[$entryKey];
+            print_R($return);
+        }else
+            $return = $entries;
+        return $return;
+    }
+    
+    /** Handler::findAll()*/
     public function findAll()
     {
         return $this->setDocuments($this->getData());
     }
     
-    /**
-     * Handler::first()
-     * 
-     * @return
-     */
+    /** Handler::first()*/
     public function first(){
         return (!isset($this->documentEntries[0])) ? false : $this->documentEntries[0];
     }
     
-    /**
-     * Handler::last()
-     * 
-     * @return
-     */
+    /** Handler::last()*/
     public function last(){
         return (!$this->documentEntries) ? false : end($this->documentEntries);
     }
     
-    /**
-     * Handler::toArray()
-     * 
-     * @return
-     */
+    /** Handler::toArray()*/
     public function toArray(){
         return json_decode(json_encode($this->getDocuments()),true);
     }
 
-    /**
-     * Handler::count()
-     * 
-     * @return
-     */
+    /** Handler::count()*/
     public function count()
     {
         return count($this->documentEntries);
