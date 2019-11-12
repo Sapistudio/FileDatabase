@@ -6,11 +6,7 @@ class Config extends Document{
     protected static $uniqueIdentifier = 'id';
     protected $configOptions;
     
-    /**
-     * Config::__construct()
-     * 
-     * @return
-     */
+    /** Config::__construct() */
     public function __construct($config = [])
     {
         if($config){
@@ -21,39 +17,23 @@ class Config extends Document{
             $this->setDir($this->getOption('dir'));
     }
     
-    /**
-     * Config::setName()
-     * 
-     * @return
-     */
+    /** Config::setName()*/
     public function setName($name)
     {
         return parent::setName($name.'.config');
     }
     
-    /**
-     * Config::getOption()
-     * 
-     * @return
-     */
+    /** Config::getOption()*/
     public function getOption($name){
         return (isset($this->configOptions->{$name})) ? $this->configOptions->{$name} : false;    
     }
     
-    /**
-     * Config::getIdentifier()
-     * 
-     * @return
-     */
+    /** Config::getIdentifier()*/
     public function getIdentifier(){
         return self::$uniqueIdentifier;
     }
     
-    /**
-     * Config::setIdentifier()
-     * 
-     * @return
-     */
+    /** Config::setIdentifier()*/
     public function setIdentifier($uid){
         self::$uniqueIdentifier = $uid;
     }
