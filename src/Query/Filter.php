@@ -6,11 +6,7 @@ class Filter{
     protected $allowed_operators = ['=','==','===','!=','!==','>','<','>=','<=','IN','NOT','LIKE','NOT LIKE','REGEX'];
     protected $filters = [];
 
-    /**
-     * Filter::add()
-     * 
-     * @return
-     */
+    /** Filter::add()*/
     public function add($logic,$arg)
     {
         if (!is_array($arg))
@@ -37,21 +33,13 @@ class Filter{
         $this->filters[$logic][] = $arg;
     }
 
-    /**
-     * Filter::formatWhere()
-     * 
-     * @return
-     */
+    /** Filter::formatWhere()*/
     protected function formatWhere($key, $value)
     {
         return [$key,'==',$value];
     }
 
-    /**
-     * Filter::get()
-     * 
-     * @return
-     */
+    /** Filter::get()*/
     public function get()
     {
         return array_filter($this->filters);
