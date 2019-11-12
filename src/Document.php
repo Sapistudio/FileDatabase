@@ -7,23 +7,13 @@ class Document{
     protected $fileExtension = '.json';
     protected $databaseDir   = null;
 
-    /**
-     * Document::load()
-     * 
-     * @param mixed $name
-     * @param mixed $dir
-     * @return
-     */
+    /** Document::load()*/
     public static function load($name,$dir=null)
     {
         return (new self())->setName($name)->setDir($dir);
     }
     
-    /**
-     * Document::getName()
-     * 
-     * @return
-     */
+    /** Document::getName()*/
     public function getName()
     {
         if(trim($this->name) == '')
@@ -31,12 +21,7 @@ class Document{
         return $this->name;
     }
     
-    /**
-     * Document::setName()
-     * 
-     * @param mixed $name
-     * @return
-     */
+    /** Document::setName()*/
     public function setName($name)
     {
         if (empty($name))
@@ -45,32 +30,18 @@ class Document{
         return $this;
     }
     
-    /**
-     * Document::setExtension()
-     * 
-     * @param mixed $ext
-     * @return
-     */
+    /** Document::setExtension()*/
     public function setExtension($ext){
         $this->fileExtension = '.'.$ext;
         return $this;
     }
     
-    /**
-     * Document::getExtension()
-     * 
-     * @return
-     */
+    /** Document::getExtension() */
     public function getExtension(){
         return $this->fileExtension;
     }
     
-    /**
-     * Document::setDir()
-     * 
-     * @param mixed $dir
-     * @return
-     */
+    /** Document::setDir()*/
     public function setDir($dir = null){
         $dir = (is_null($dir)) ? realpath(__DIR__).DIRECTORY_SEPARATOR.'database'.DIRECTORY_SEPARATOR : $dir;
         if(!is_dir($dir))
@@ -79,74 +50,42 @@ class Document{
         return $this;
     }
     
-    /**
-     * Document::getDir()
-     * 
-     * @return
-     */
+    /** Document::getDir()*/
     public function getDir(){
         return $this->databaseDir;
     }
     
-    /**
-     * Document::getPath()
-     * 
-     * @return
-     */
+    /** Document::getPath()*/
     public final function getPath()
     {
         return $this->getDir().$this->getName().$this->getExtension();
     }
     
-    /**
-     * Document::getKey()
-     * 
-     * @param mixed $field
-     * @param bool $assoc
-     * @return
-     */
+    /** Document::getKey()*/
     public function getKey($field, $assoc = false)
     {
         return $assoc ? $this->get($assoc)[$field] : $this->get($assoc)->{$field};
     }
     
-    /**
-     * Document::get()
-     * 
-     * @param bool $assoc
-     * @return
-     */
+    /** Document::get()*/
     public final function get($assoc = false)
     {
         return json_decode(file_get_contents($this->getPath()),$assoc);
     }
 
-    /**
-     * Document::put()
-     * 
-     * @param mixed $data
-     * @return
-     */
+    /** Document::put()*/
     public final function put($data)
     {
         return file_put_contents($this->getPath(), json_encode($data));
     }
 
-    /**
-     * Document::exists()
-     * 
-     * @return
-     */
+    /** Document::exists()*/
     public final function exists()
     {
         return file_exists($this->getPath());
     }
 
-    /**
-     * Document::remove()
-     * 
-     * @return
-     */
+    /** Document::remove()*/
     public final function remove()
     {
         if ($this->exists())
