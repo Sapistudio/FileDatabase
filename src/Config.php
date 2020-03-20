@@ -13,8 +13,8 @@ class Config extends Document{
             foreach ($config as $key => $value)
                  @$this->configOptions->{$key} = $value;
         }
-        if($this->getOption('dir'))
-            $this->setDir($this->getOption('dir'));
+        //if($this->getOption('dir'))
+            //$this->setDir($this->getOption('dir'));
     }
     
     /** Config::setName()*/
