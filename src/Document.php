@@ -43,10 +43,10 @@ class Document{
     
     /** Document::setDir()*/
     public function setDir($dir = null){
-        $dir = (is_null($dir)) ? realpath(__DIR__).DIRECTORY_SEPARATOR.'database'.DIRECTORY_SEPARATOR : $dir;
+        $dir = (!$dir) ? realpath(__DIR__).DIRECTORY_SEPARATOR.'database'.DIRECTORY_SEPARATOR : $dir;
         if(!is_dir($dir))
             mkdir($dir,0755,true);
-        $this->databaseDir = (is_null($dir)) ? realpath(__DIR__).DIRECTORY_SEPARATOR.'database'.DIRECTORY_SEPARATOR : $dir;
+        $this->databaseDir = (!$dir) ? realpath(__DIR__).DIRECTORY_SEPARATOR.'database'.DIRECTORY_SEPARATOR : $dir;        
         return $this;
     }
     
