@@ -23,7 +23,7 @@ class Handler implements \Countable{
         $this->databaseConfig   = (new Config($configOptions))->setName($databaseName);
         $this->databaseDocument = (new Document)->setName($databaseName)->setDir($this->databaseConfig->getDir());
         if (!$this->dbExists()){
-            $fields = Validate::arrToLower($this->databaseConfig->getOption('fields'));
+            $fields = ($this->databaseConfig->getOption('fields')) ? Validate::arrToLower($this->databaseConfig->getOption('fields')) : [];
             Validate::types(array_values($fields));
             if(!array_key_exists($this->databaseConfig->getIdentifier(),$fields))
                 $fields = [$this->databaseConfig->getIdentifier() => 'integer'] + $fields;
