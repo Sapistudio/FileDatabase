@@ -297,6 +297,16 @@ class Handler implements \Countable{
     public function toArray(){
         return json_decode(json_encode($this->getDocuments()),true);
     }
+    
+    /** Handler::groupArray()*/
+    public function groupArray($field = null){
+        foreach($this->toArray() as $indexKey=>$documentData){
+            if(isset($documentData[$field])){
+                $return[$documentData[$field]][] = $documentData;
+            }
+        }
+        return $return;
+    }
 
     /** Handler::count()*/
     public function count()
