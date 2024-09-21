@@ -9,6 +9,9 @@ class Config extends Document{
     /** Config::__construct() */
     public function __construct($config = [])
     {
+        if ($this->configOptions === null) {
+            $this->configOptions = new stdClass();  // Initialize as an empty object
+        }
         if($config){
             foreach ($config as $key => $value)
                  @$this->configOptions->{$key} = $value;
